@@ -37,6 +37,8 @@ const teamMembers = [
     linkedin: "#",
     twitter: "#",
     email: "sara@vivasoft.com",
+
+    
   },
 ];
 
