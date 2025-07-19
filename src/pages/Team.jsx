@@ -12,6 +12,7 @@ import {
   Mail as MailIcon,
 } from "lucide-react";
 
+
 const teamMembers = [
   {
     name: "Alice Johnson",
