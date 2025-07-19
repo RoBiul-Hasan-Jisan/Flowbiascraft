@@ -29,7 +29,7 @@ import {
 } from "react-icons/si";
 import { FaJava } from "react-icons/fa";
 
-import Tooltip from "../components/Tooltip/Tooltip"; // Adjust path if needed
+import Tooltip from "../components/Tooltip/Tooltip"; 
 
 const technologies = [
   { name: "React", icon: SiReact, color: "#61DAFB" },
