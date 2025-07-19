@@ -101,12 +101,12 @@ function TechIcon({ name, Icon, color }) {
         tiltMaxAngleY={12}
         scale={1.1}
         transitionSpeed={1000}
-        className="rounded-full p-5 bg-gradient-to-tr from-white/90 to-gray-100 dark:from-gray-800 dark:to-gray-900 shadow-lg group-focus:ring-4 group-focus:ring-indigo-400"
+        className="rounded-full p-5 bg-white dark:bg-gray-800 ring-1 ring-gray-200 dark:ring-gray-700 shadow-xl group-focus:ring-4 group-focus:ring-indigo-400"
       >
         <div
           className="flex items-center justify-center rounded-full w-16 h-16 mx-auto"
           style={{
-            background: `radial-gradient(circle at center, ${color}33, transparent 80%)`,
+            background: `radial-gradient(circle at center, ${color}55, transparent 70%)`,
           }}
         >
           <Icon size={56} color={color} />
@@ -120,7 +120,7 @@ function TechIcon({ name, Icon, color }) {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
-            className="absolute top-full mt-2 left-1/2 transform -translate-x-1/2 px-3 py-1 rounded bg-gray-900 text-white text-sm select-none whitespace-nowrap shadow-lg z-10"
+            className="absolute top-full mt-2 left-1/2 transform -translate-x-1/2 px-3 py-1 rounded bg-gray-900/90 text-white text-sm select-none whitespace-nowrap shadow-lg backdrop-blur-sm z-10"
           >
             {name}
           </motion.span>
