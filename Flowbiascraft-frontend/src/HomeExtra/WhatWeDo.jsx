@@ -1,5 +1,10 @@
 import { motion } from "framer-motion";
 import { FaCode, FaMobileAlt, FaPaintBrush, FaCloud, FaPlug, FaLightbulb } from "react-icons/fa";
+import Tooltip from '../components/Tooltip/Tooltip';
+
+
+
+
 
 const services = [
   {
@@ -40,11 +45,10 @@ const services = [
   },
 ];
 
-
 export default function WhatWeDo() {
   return (
     <section className="relative bg-gradient-to-b from-white via-slate-50 to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-24 px-6 sm:px-10 overflow-hidden">
-      {/* ✅ Animated glowing background (framer-motion friendly) */}
+      {/* Animated glowing background */}
       <motion.div
         initial={{ opacity: 0.2, scale: 0.8 }}
         animate={{ opacity: 0.3, scale: 1 }}
@@ -104,7 +108,9 @@ export default function WhatWeDo() {
                 className="w-full sm:w-1/2 bg-white/60 dark:bg-white/10 backdrop-blur-md p-6 rounded-2xl shadow-2xl border-l-4 border-indigo-600 hover:scale-[1.02] transition-transform cursor-default"
               >
                 <div className="flex items-center gap-3 text-indigo-700 dark:text-indigo-300 text-2xl mb-3 select-none">
-                  {service.icon}
+                  <Tooltip content={service.description}>
+                    <span>{service.icon}</span>
+                  </Tooltip>
                   <h3 className="font-semibold text-xl">{service.title}</h3>
                 </div>
                 <p className="text-gray-700 dark:text-gray-300 text-sm md:text-base leading-relaxed">

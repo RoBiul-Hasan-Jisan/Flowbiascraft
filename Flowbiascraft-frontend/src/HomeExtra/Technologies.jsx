@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React from "react";
+import { motion } from "framer-motion";
 import Tilt from "react-parallax-tilt";
 
 import {
@@ -28,6 +28,8 @@ import {
   SiTailwindcss,
 } from "react-icons/si";
 import { FaJava } from "react-icons/fa";
+
+import Tooltip from "../components/Tooltip/Tooltip"; // Adjust path if needed
 
 const technologies = [
   { name: "React", icon: SiReact, color: "#61DAFB" },
@@ -77,55 +79,38 @@ const itemVariants = {
 };
 
 function TechIcon({ name, Icon, color }) {
-  const [showTooltip, setShowTooltip] = useState(false);
-
   return (
     <motion.div
       variants={itemVariants}
       tabIndex={0}
       role="button"
       aria-label={`Technology: ${name}`}
-      onFocus={() => setShowTooltip(true)}
-      onBlur={() => setShowTooltip(false)}
-      onMouseEnter={() => setShowTooltip(true)}
-      onMouseLeave={() => setShowTooltip(false)}
       className="group outline-none relative"
       style={{ cursor: "pointer" }}
     >
-      <Tilt
-        glareEnable={true}
-        glareMaxOpacity={0.15}
-        glareColor={color}
-        glarePosition="all"
-        tiltMaxAngleX={12}
-        tiltMaxAngleY={12}
-        scale={1.1}
-        transitionSpeed={1000}
-        className="rounded-full p-5 bg-white dark:bg-gray-800 ring-1 ring-gray-200 dark:ring-gray-700 shadow-xl group-focus:ring-4 group-focus:ring-indigo-400"
-      >
-        <div
-          className="flex items-center justify-center rounded-full w-16 h-16 mx-auto"
-          style={{
-            background: `radial-gradient(circle at center, ${color}55, transparent 70%)`,
-          }}
+      <Tooltip content={name}>
+        <Tilt
+          glareEnable={true}
+          glareMaxOpacity={0.15}
+          glareColor={color}
+          glarePosition="all"
+          tiltMaxAngleX={12}
+          tiltMaxAngleY={12}
+          scale={1.1}
+          transitionSpeed={1000}
+          className="rounded-full p-5 bg-white dark:bg-gray-800 ring-1 ring-gray-200 dark:ring-gray-700 shadow-xl group-focus:ring-4 group-focus:ring-indigo-400"
+          title={name} // native tooltip fallback
         >
-          <Icon size={56} color={color} />
-        </div>
-      </Tilt>
-
-      {/* Custom tooltip */}
-      <AnimatePresence>
-        {showTooltip && (
-          <motion.span
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 10 }}
-            className="absolute top-full mt-2 left-1/2 transform -translate-x-1/2 px-3 py-1 rounded bg-gray-900/90 text-white text-sm select-none whitespace-nowrap shadow-lg backdrop-blur-sm z-10"
+          <div
+            className="flex items-center justify-center rounded-full w-16 h-16 mx-auto"
+            style={{
+              background: `radial-gradient(circle at center, ${color}55, transparent 70%)`,
+            }}
           >
-            {name}
-          </motion.span>
-        )}
-      </AnimatePresence>
+            <Icon size={56} color={color} />
+          </div>
+        </Tilt>
+      </Tooltip>
     </motion.div>
   );
 }
