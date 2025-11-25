@@ -1,6 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Mail, Phone, MapPin } from "lucide-react";
+import { offices } from '../data/servicesData';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -12,38 +13,6 @@ const fadeUp = {
 };
 
 export default function ContactUs() {
-  const offices = [
-    {
-      title: "Bangladesh",
-      address: "8th Floor, 2 Bir Uttam AK Khandakar Road, Mohakhali C/A, Dhaka 1212",
-      email: "sales@brainstation-23.com",
-      phone: "+8801404055226",
-    },
-    {
-      title: "USA",
-      address: "7426 Alban Station Blvd, Suite A101, Springfield, VA 22150",
-      email: "sales@brainstation-23.com",
-      phone: "+1 201 534 7200",
-    },
-    {
-      title: "Germany",
-      address: "26160 Bad Zwischenahn, Germany",
-      email: "sales@brainstation-23.de",
-      phone: "+49 4403 6999839",
-    },
-    {
-      title: "UAE",
-      address: "903, DAMAC XL Tower, Business Bay, Dubai, PO BOX-29544",
-      email: "sales@brainstation-23.com",
-      phone: "+971 42420223",
-    },
-    {
-      title: "Malaysia",
-      address: "Level 9, Integra Tower, The Intermark, Jalan Tun Razak, Kuala Lumpur 50400",
-      email: "sales@brainstation-23.com",
-    },
-  ];
-
   return (
     <section className="min-h-screen bg-gradient-to-br from-white to-slate-100 text-gray-800 px-6 py-20 lg:px-24">
       {/* Hero Section */}
@@ -55,10 +24,10 @@ export default function ContactUs() {
         className="max-w-4xl mx-auto text-center mb-20"
       >
         <h1 className="text-5xl font-extrabold text-indigo-700 mb-4">
-          Let’s Work Together
+          Let's Work Together
         </h1>
         <p className="text-lg text-gray-600">
-          Got a project in mind? Reach out and let’s build something amazing together.
+          Got a project in mind? Reach out and let's build something amazing together.
         </p>
       </motion.div>
 

@@ -11,108 +11,7 @@ import {
   Twitter,
   Mail as MailIcon,
 } from "lucide-react";
-
-
-const teamMembers = [
-  {
-    name: "Alice Johnson",
-    role: "Lead Developer",
-    img: "https://randomuser.me/api/portraits/women/44.jpg",
-    linkedin: "#",
-    twitter: "#",
-    email: "alice@vivasoft.com",
-  },
-  {
-    name: "Michael Smith",
-    role: "UI/UX Designer",
-    img: "https://randomuser.me/api/portraits/men/46.jpg",
-    linkedin: "#",
-    twitter: "#",
-    email: "michael@vivasoft.com",
-  },
-  {
-    name: "Sara Lee",
-    role: "Project Manager",
-    img: "https://randomuser.me/api/portraits/women/47.jpg",
-    linkedin: "#",
-    twitter: "#",
-    email: "sara@vivasoft.com",
-
-    
-  },
-];
-
-const benefits = [
-  { icon: <Briefcase size={24} />, title: "Top-tier Software Outsourcing" },
-  { icon: <Clock size={24} />, title: "Flexible Work-Hours" },
-  { icon: <Trophy size={24} />, title: "Revolutionary Software Culture" },
-  { icon: <Gamepad size={24} />, title: "Game Zone" },
-  { icon: <Users size={24} />, title: "Knowledge Sharing" },
-  { icon: <DollarSign size={24} />, title: "Competitive Remuneration" },
-];
-
-const jobs = [
-  {
-    id: 1,
-    title: "Senior Angular Developer (Nepal)",
-    location: "Kathmandu, Nepal",
-    experience: "5+ Years Exp.",
-  },
-  {
-    id: 2,
-    title: "Frontend Engineer (Remote)",
-    location: "Remote",
-    experience: "3+ Years Exp.",
-  },
-  {
-    id: 3,
-    title: "Backend Developer",
-    location: "Dhaka, Bangladesh",
-    experience: "4+ Years Exp.",
-  },
-  {
-    id: 4,
-    title: "Full Stack Developer",
-    location: "Dhaka, Bangladesh",
-    experience: "4+ Years Exp.",
-  },
-  {
-    id: 5,
-    title: "DevOps Engineer",
-    location: "Remote",
-    experience: "3+ Years Exp.",
-  },
-  {
-    id: 6,
-    title: "QA Automation Engineer",
-    location: "Kathmandu, Nepal",
-    experience: "2+ Years Exp.",
-  },
-  {
-    id: 7,
-    title: "Mobile App Developer (iOS/Android)",
-    location: "Remote",
-    experience: "3+ Years Exp.",
-  },
-  {
-    id: 8,
-    title: "UI/UX Designer",
-    location: "Dhaka, Bangladesh",
-    experience: "4+ Years Exp.",
-  },
-  {
-    id: 9,
-    title: "Data Scientist",
-    location: "Remote",
-    experience: "5+ Years Exp.",
-  },
-  {
-    id: 10,
-    title: "Technical Project Manager",
-    location: "Kathmandu, Nepal",
-    experience: "6+ Years Exp.",
-  },
-];
+import { teamMembers, benefits, jobs } from '../data/servicesData';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -121,6 +20,16 @@ const fadeUp = {
     y: 0,
     transition: { delay: i * 0.2, duration: 0.6 },
   }),
+};
+
+// Icon mapping
+const iconMap = {
+  Briefcase: Briefcase,
+  Clock: Clock,
+  Gamepad: Gamepad,
+  Trophy: Trophy,
+  Users: Users,
+  DollarSign: DollarSign,
 };
 
 export default function TeamCareers() {
@@ -161,35 +70,38 @@ export default function TeamCareers() {
         </motion.p>
 
         <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3">
-          {teamMembers.map((member, i) => (
-            <motion.div
-              key={member.email}
-              custom={i + 2}
-              variants={fadeUp}
-              className="bg-white rounded-xl shadow-md p-6 flex flex-col items-center"
-            >
-              <img
-                src={member.img}
-                alt={member.name}
-                className="w-32 h-32 rounded-full object-cover mb-4 shadow-lg"
-              />
-              <h3 className="text-xl font-semibold text-indigo-700 mb-1">
-                {member.name}
-              </h3>
-              <p className="text-gray-600 mb-4">{member.role}</p>
-              <div className="flex gap-4 text-indigo-600">
-                <a href={member.linkedin} aria-label="LinkedIn" target="_blank" rel="noreferrer">
-                  <Linkedin size={24} />
-                </a>
-                <a href={member.twitter} aria-label="Twitter" target="_blank" rel="noreferrer">
-                  <Twitter size={24} />
-                </a>
-                <a href={`mailto:${member.email}`} aria-label="Email">
-                  <MailIcon size={24} />
-                </a>
-              </div>
-            </motion.div>
-          ))}
+          {teamMembers.map((member, i) => {
+            const IconComponent = iconMap[member.icon];
+            return (
+              <motion.div
+                key={member.email}
+                custom={i + 2}
+                variants={fadeUp}
+                className="bg-white rounded-xl shadow-md p-6 flex flex-col items-center"
+              >
+                <img
+                  src={member.img}
+                  alt={member.name}
+                  className="w-32 h-32 rounded-full object-cover mb-4 shadow-lg"
+                />
+                <h3 className="text-xl font-semibold text-indigo-700 mb-1">
+                  {member.name}
+                </h3>
+                <p className="text-gray-600 mb-4">{member.role}</p>
+                <div className="flex gap-4 text-indigo-600">
+                  <a href={member.linkedin} aria-label="LinkedIn" target="_blank" rel="noreferrer">
+                    <Linkedin size={24} />
+                  </a>
+                  <a href={member.twitter} aria-label="Twitter" target="_blank" rel="noreferrer">
+                    <Twitter size={24} />
+                  </a>
+                  <a href={`mailto:${member.email}`} aria-label="Email">
+                    <MailIcon size={24} />
+                  </a>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
       </motion.section>
 
@@ -219,17 +131,22 @@ export default function TeamCareers() {
           Why Join Us?
         </motion.h3>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 text-left">
-          {benefits.map((b, i) => (
-            <motion.div
-              key={i}
-              custom={i + 1}
-              variants={fadeUp}
-              className="flex items-center gap-4 bg-white p-5 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition"
-            >
-              <div className="text-indigo-600">{b.icon}</div>
-              <h4 className="text-md font-medium text-gray-700">{b.title}</h4>
-            </motion.div>
-          ))}
+          {benefits.map((b, i) => {
+            const IconComponent = iconMap[b.icon];
+            return (
+              <motion.div
+                key={i}
+                custom={i + 1}
+                variants={fadeUp}
+                className="flex items-center gap-4 bg-white p-5 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition"
+              >
+                <div className="text-indigo-600">
+                  <IconComponent size={24} />
+                </div>
+                <h4 className="text-md font-medium text-gray-700">{b.title}</h4>
+              </motion.div>
+            );
+          })}
         </div>
       </motion.section>
 

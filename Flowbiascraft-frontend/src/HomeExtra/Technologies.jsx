@@ -1,138 +1,124 @@
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useRef } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Tilt from "react-parallax-tilt";
-
 import {
-  SiReact,
-  SiAngular,
-  SiVite,
-  SiCplusplus,
-  SiRuby,
-  SiKotlin,
-  SiSwift,
-  SiJavascript,
-  SiTypescript,
-  SiPython,
-  SiC,
-  SiPhp,
-  SiGo,
-  SiRust,
-  SiHtml5,
-  SiCss3,
-  SiMysql,
-  SiMongodb,
-  SiFirebase,
-  SiDocker,
-  SiGit,
-  SiGithub,
-  SiTailwindcss,
+  SiReact, SiAngular, SiVite, SiCplusplus, SiRuby, SiKotlin, SiSwift,
+  SiJavascript, SiTypescript, SiPython, SiC, SiPhp, SiGo, SiRust,
+  SiHtml5, SiCss3, SiMysql, SiMongodb, SiFirebase, SiDocker, SiGit,
+  SiGithub, SiTailwindcss,
 } from "react-icons/si";
 import { FaJava } from "react-icons/fa";
+import Tooltip from "../components/Tooltip/Tooltip";
+import { technologies } from '../data/servicesData';
 
-import Tooltip from "../components/Tooltip/Tooltip"; 
+gsap.registerPlugin(ScrollTrigger);
 
-const technologies = [
-  { name: "React", icon: SiReact, color: "#61DAFB" },
-  { name: "Angular", icon: SiAngular, color: "#DD0031" },
-  { name: "Vite", icon: SiVite, color: "#646CFF" },
-  { name: "JavaScript", icon: SiJavascript, color: "#F7DF1E" },
-  { name: "TypeScript", icon: SiTypescript, color: "#3178C6" },
-  { name: "Python", icon: SiPython, color: "#3776AB" },
-  { name: "Java", icon: FaJava, color: "#007396" },
-  { name: "C++", icon: SiCplusplus, color: "#00599C" },
-  { name: "C", icon: SiC, color: "#A8B9CC" },
-  { name: "Ruby", icon: SiRuby, color: "#CC342D" },
-  { name: "Kotlin", icon: SiKotlin, color: "#0095D5" },
-  { name: "Swift", icon: SiSwift, color: "#FA7343" },
-  { name: "Go", icon: SiGo, color: "#00ADD8" },
-  { name: "Rust", icon: SiRust, color: "#000000" },
-  { name: "PHP", icon: SiPhp, color: "#777BB4" },
-  { name: "HTML5", icon: SiHtml5, color: "#E34F26" },
-  { name: "CSS3", icon: SiCss3, color: "#1572B6" },
-  { name: "Tailwind CSS", icon: SiTailwindcss, color: "#06B6D4" },
-  { name: "MySQL", icon: SiMysql, color: "#4479A1" },
-  { name: "MongoDB", icon: SiMongodb, color: "#47A248" },
-  { name: "Firebase", icon: SiFirebase, color: "#FFCA28" },
-  { name: "Docker", icon: SiDocker, color: "#2496ED" },
-  { name: "Git", icon: SiGit, color: "#F05032" },
-  { name: "GitHub", icon: SiGithub, color: "#181717" },
-];
-
-// Animation variants for container and children (stagger)
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.08,
-    },
-  },
+const iconMap = {
+  SiReact, SiAngular, SiVite, SiJavascript, SiTypescript, SiPython, FaJava,
+  SiCplusplus, SiC, SiRuby, SiKotlin, SiSwift, SiGo, SiRust, SiPhp,
+  SiHtml5, SiCss3, SiTailwindcss, SiMysql, SiMongodb, SiFirebase, SiDocker,
+  SiGit, SiGithub,
 };
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 30, scale: 0.8 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { type: "spring", stiffness: 200, damping: 20 },
-  },
-};
+function TechIcon({ name, icon, color }) {
+  const IconComponent = iconMap[icon];
+  const itemRef = useRef(null);
 
-function TechIcon({ name, Icon, color }) {
+  // Hover Animation: Clean Scale & Border Highlight
+  const onEnter = () => {
+    gsap.to(itemRef.current, {
+      scale: 1.1,
+      y: -5,
+      borderColor: color,
+      boxShadow: `0px 10px 20px -5px ${color}40`, // 40 is hex opacity
+      duration: 0.3,
+      ease: "power2.out"
+    });
+  };
+
+  const onLeave = () => {
+    gsap.to(itemRef.current, {
+      scale: 1,
+      y: 0,
+      borderColor: "rgba(156, 163, 175, 0.2)", // gray-400 with opacity
+      boxShadow: "0px 0px 0px 0px transparent",
+      duration: 0.3,
+      ease: "power2.inOut"
+    });
+  };
+
   return (
-    <motion.div
-      variants={itemVariants}
-      tabIndex={0}
-      role="button"
-      aria-label={`Technology: ${name}`}
-      className="group outline-none relative"
-      style={{ cursor: "pointer" }}
+    <div
+      ref={itemRef}
+      className="tech-item relative bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700/50 p-1 cursor-pointer transition-colors will-change-transform"
+      onMouseEnter={onEnter}
+      onMouseLeave={onLeave}
     >
       <Tooltip content={name}>
         <Tilt
           glareEnable={true}
-          glareMaxOpacity={0.15}
+          glareMaxOpacity={0.2}
           glareColor={color}
           glarePosition="all"
-          tiltMaxAngleX={12}
-          tiltMaxAngleY={12}
-          scale={1.1}
-          transitionSpeed={1000}
-          className="rounded-full p-5 bg-white dark:bg-gray-800 ring-1 ring-gray-200 dark:ring-gray-700 shadow-xl group-focus:ring-4 group-focus:ring-indigo-400"
-          title={name} // native tooltip fallback
+          scale={1.02}
+          transitionSpeed={1500}
+          className="flex items-center justify-center w-24 h-24 sm:w-28 sm:h-28 mx-auto"
         >
-          <div
-            className="flex items-center justify-center rounded-full w-16 h-16 mx-auto"
-            style={{
-              background: `radial-gradient(circle at center, ${color}55, transparent 70%)`,
-            }}
-          >
-            <Icon size={56} color={color} />
-          </div>
+          <IconComponent size={48} style={{ color: color }} />
         </Tilt>
       </Tooltip>
-    </motion.div>
+    </div>
   );
 }
 
 export default function Technologies() {
+  const containerRef = useRef(null);
+
+  useGSAP(() => {
+    // Reveal Animation: Center-Out Ripple
+    // This feels like a modern HUD loading up
+    gsap.fromTo(".tech-item",
+      { 
+        y: 50, 
+        opacity: 0, 
+        scale: 0.8 
+      },
+      {
+        y: 0,
+        opacity: 1,
+        scale: 1,
+        duration: 0.8,
+        ease: "back.out(1.2)", // Subtle bounce, not cartoony
+        stagger: {
+          grid: "auto",
+          from: "center", // Ripples from the middle
+          amount: 0.6
+        },
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top 75%",
+          toggleActions: "play none none reverse",
+        }
+      }
+    );
+  }, { scope: containerRef });
+
   return (
-    <section className="py-20 bg-white dark:bg-gray-900 text-center px-4 sm:px-8 select-none">
-      <h2 className="text-4xl font-extrabold mb-16 text-gray-900 dark:text-white">
+    <section 
+      ref={containerRef}
+      className="py-20 bg-gray-50 dark:bg-gray-900 text-center px-4 sm:px-8 select-none"
+    >
+      <h2 className="text-4xl font-extrabold mb-16 text-gray-900 dark:text-white tracking-tight">
         Technologies We Use
       </h2>
 
-      <motion.div
-        className="max-w-6xl mx-auto grid grid-cols-3 sm:grid-cols-5 md:grid-cols-6 gap-12"
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.25 }}
-      >
-        {technologies.map(({ name, icon: Icon, color }) => (
-          <TechIcon key={name} name={name} Icon={Icon} color={color} />
+      <div className="max-w-6xl mx-auto grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-8">
+        {technologies.map(({ name, icon, color }) => (
+          <TechIcon key={name} name={name} icon={icon} color={color} />
         ))}
-      </motion.div>
+      </div>
     </section>
   );
 }

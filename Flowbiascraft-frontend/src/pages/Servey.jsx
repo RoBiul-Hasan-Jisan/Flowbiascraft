@@ -1,176 +1,168 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { topServices, enterpriseServices, colorsPalette, serviceRoutes } from '../data/servicesData';
 
-const topServices = [
-  "ML & AI Development",
-  "Data Engineering",
-  "Business Intelligence",
-  "AR/VR Solutions",
-  "Game Studio",
-  "QA Testing & Automation",
-];
+gsap.registerPlugin(ScrollTrigger);
 
+const allServices = [...topServices, ...enterpriseServices];
 
+const ParallaxCard = ({ service, index, total, progress }) => {
+  const cardRef = useRef(null);
+  const contentRef = useRef(null);
+  const colors = colorsPalette[index % colorsPalette.length];
 
-const enterpriseServices = [
-  "LMS Development",
-  "Web & Mobile App Development",
-  "eCommerce Development",
-  "Adobe Experience Manager",
-  "SharePoint Services",
-  "Enterprise Focused",
-  "Field Force Automation",
-  "Banking Solutions",
-  "Cloud Solutions",
-  "Cyber Security",
-  "ERP Development",
-  "Backup Solutions",
-];
+  // Mouse Light Effect
+  const handleMouseMove = (e) => {
+    const { left, top } = cardRef.current.getBoundingClientRect();
+    const x = e.clientX - left;
+    const y = e.clientY - top;
+    
+    // Update CSS variables for high performance (no re-renders)
+    cardRef.current.style.setProperty("--mouse-x", `${x}px`);
+    cardRef.current.style.setProperty("--mouse-y", `${y}px`);
+  };
 
-const colorsPalette = [
-  ["#4F46E5", "#6366F1", "#A78BFA"],
-  ["#059669", "#10B981", "#6EE7B7"],
-  ["#DC2626", "#F87171", "#FCA5A5"],
-  ["#DB2777", "#EC4899", "#F472B6"],
-  ["#2563EB", "#3B82F6", "#60A5FA"],
-  ["#D97706", "#F59E0B", "#FBBF24"],
-];
+  return (
+    <div 
+      className="sticky top-0 h-screen flex items-center justify-center p-4 sm:p-8 overflow-hidden"
+      style={{ 
+        zIndex: index + 1, // Ensure correct stacking order
+      }}
+    >
+      <div 
+        ref={cardRef}
+        onMouseMove={handleMouseMove}
+        className="card-container relative w-full max-w-5xl h-[70vh] rounded-[3rem] bg-[#0f0f0f] border border-white/10 overflow-hidden group shadow-2xl will-change-transform"
+        style={{
+          // Scale starts slightly larger for lower cards to create stack effect
+          transformOrigin: "top center",
+        }}
+      >
+        
+        {/* 1. Volumetric Light / Glow (Follows Mouse) */}
+        <div 
+            className="pointer-events-none absolute opacity-0 group-hover:opacity-100 transition-opacity duration-500 inset-0 z-0"
+            style={{
+                background: `radial-gradient(
+                    800px circle at var(--mouse-x) var(--mouse-y), 
+                    rgba(255,255,255,0.06),
+                    transparent 40%
+                )`
+            }}
+        />
 
-const serviceRoutes = {
-  "ML & AI Development": "/ml-ai-development",
-  "Data Engineering": "/data-engineering",
-  "Business Intelligence": "/business-intelligence",
-  "AR/VR Solutions": "/ar-vr-solutions",
-  "Game Studio": "/game-studio",
-  "QA Testing & Automation": "/qa-testing",
-  "LMS Development": "/lms-development",
-  "Web & Mobile App Development": "/web-mobile-apps",
-  "eCommerce Development": "/ecommerce-development",
-  "Adobe Experience Manager": "/adobe-experience-manager",
-  "SharePoint Services": "/sharepoint-services",
-  "Enterprise Focused": "/enterprise-focused",
-  "Field Force Automation": "/field-force-automation",
-  "Banking Solutions": "/banking-solutions",
-  "Cloud Solutions": "/cloud-solutions",
-  "Cyber Security": "/cyber-security",
-  "ERP Development": "/erp-development",
-  "Backup Solutions": "/backup-solutions",
+        {/* 2. Animated Gradient Background */}
+        <div 
+            className="absolute inset-0 opacity-20"
+            style={{
+                background: `linear-gradient(135deg, ${colors[0]}, ${colors[1]})`,
+                filter: "blur(80px)"
+            }}
+        />
+
+        {/* 3. Noise Texture (Cinematic Feel) */}
+        <div className="absolute inset-0 opacity-[0.15] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] brightness-100 contrast-150 mix-blend-overlay pointer-events-none" />
+
+        {/* 4. Content */}
+        <Link to={serviceRoutes[service]} className="relative z-10 h-full flex flex-col justify-between p-8 md:p-16 text-white hover:text-white/90 transition-colors">
+            
+            {/* Header */}
+            <div className="flex justify-between items-start border-b border-white/10 pb-6">
+                <span className="font-mono text-sm tracking-widest uppercase text-gray-400">
+                    Service_0{index + 1}
+                </span>
+                <span className="font-mono text-sm border border-white/20 rounded-full px-3 py-1">
+                    EXP: {colors[0]}
+                </span>
+            </div>
+
+            {/* Main Title */}
+            <div ref={contentRef} className="card-content transform transition-transform duration-700">
+                <h2 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-[0.85] mix-blend-lighten">
+                    {service}
+                </h2>
+            </div>
+
+            {/* Footer */}
+            <div className="flex justify-between items-end">
+                <p className="max-w-md text-gray-400 text-lg md:text-xl font-light leading-relaxed">
+                    We architect scalable solutions using {service} to drive enterprise growth and digital transformation.
+                </p>
+                <div className="w-16 h-16 rounded-full bg-white text-black flex items-center justify-center transform transition-transform duration-300 group-hover:rotate-[-45deg] group-hover:scale-110">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </div>
+            </div>
+        </Link>
+      </div>
+    </div>
+  );
 };
 
 export default function Services() {
+  const containerRef = useRef(null);
+
+  useGSAP(() => {
+    const cards = gsap.utils.toArray(".card-container");
+    
+    cards.forEach((card, i) => {
+      // Logic: As the next card scrolls into view, the current card 
+      // (card[i]) needs to scale down and darken to simulate depth.
+      
+      const nextCard = cards[i + 1];
+      if (!nextCard) return; // Last card doesn't need to scale down
+
+      gsap.to(card, {
+        scale: 0.9, // Shrink slightly
+        filter: "brightness(0.5) blur(5px)", // Fade into background
+        y: -50, // Move up slightly
+        opacity: 0,
+        transformOrigin: "center top",
+        ease: "power2.out", // Smooth easing
+        scrollTrigger: {
+          trigger: card.parentElement.nextElementSibling, // Trigger when NEXT container hits
+          start: "top bottom", // When next card enters viewport
+          end: "top top", // When next card covers this one
+          scrub: true,
+        }
+      });
+    });
+
+  }, { scope: containerRef });
+
   return (
-    <section className="min-h-screen bg-gradient-to-tr from-gray-900 via-gray-800 to-gray-900 px-6 py-24 max-w-7xl mx-auto relative overflow-hidden">
-      <header className="text-center mb-20 select-none">
-        <h1 className="text-6xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-red-500 to-yellow-400 animate-textGlow">
-          Top Services
+    <section ref={containerRef} className="bg-black relative">
+      
+      {/* Intro Header */}
+      <div className="h-[50vh] flex flex-col justify-center items-center text-center px-4 relative z-10">
+        <h1 className="text-7xl font-bold text-white mb-6 tracking-tight">
+          Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-500">Expertise</span>
         </h1>
-        <p className="text-gray-300 mt-6 max-w-3xl mx-auto text-lg tracking-wider leading-relaxed">
-          Delivering cutting-edge technology solutions tailored to your business needs.
-        </p>
-      </header>
-
-      <div className="grid gap-14 md:grid-cols-3 place-items-center">
-        {topServices.map((service, idx) => {
-          const colors = colorsPalette[idx % colorsPalette.length];
-          return (
-            <Link to={serviceRoutes[service]} key={service} className="w-full">
-              <article
-                className="service-card"
-                style={{
-                  background: `linear-gradient(135deg, ${colors[0]}, ${colors[1]}, ${colors[2]})`,
-                  backgroundSize: "400% 400%",
-                  animationDelay: `${idx * 200}ms`,
-                }}
-              >
-                <h3 className="text-3xl font-extrabold mb-2 text-white drop-shadow-lg tracking-wide">
-                  {service}
-                </h3>
-              </article>
-            </Link>
-          );
-        })}
+        <p className="text-gray-500 animate-bounce mt-10">Scroll to explore</p>
       </div>
 
-      <header className="text-center mb-20 mt-32 select-none">
-        <h1 className="text-6xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-blue-500 to-cyan-400 animate-textGlow">
-          Enterprise Focused
-        </h1>
-      </header>
-
-      <div className="grid gap-14 md:grid-cols-3 place-items-center">
-        {enterpriseServices.map((service, idx) => {
-          const colors = colorsPalette[(idx + topServices.length) % colorsPalette.length];
-          return (
-            <Link to={serviceRoutes[service]} key={service} className="w-full">
-              <article
-                className="service-card"
-                style={{
-                  background: `linear-gradient(135deg, ${colors[0]}, ${colors[1]}, ${colors[2]})`,
-                  backgroundSize: "400% 400%",
-                  animationDelay: `${idx * 200}ms`,
-                }}
-              >
-                <h3 className="text-3xl font-extrabold mb-2 text-white drop-shadow-lg tracking-wide">
-                  {service}
-                </h3>
-              </article>
-            </Link>
-          );
-        })}
+      {/* The Stack Container */}
+      <div className="relative w-full pb-24">
+        {allServices.map((service, idx) => (
+          <ParallaxCard 
+            key={service} 
+            service={service} 
+            index={idx} 
+            total={allServices.length}
+          />
+        ))}
       </div>
 
-      <style>{`
-        @keyframes textGlow {
-          0%, 100% {
-            text-shadow: 0 0 8px #f43f5e, 0 0 16px #fb7185, 0 0 24px #f43f5e;
-          }
-          50% {
-            text-shadow: 0 0 16px #fb7185, 0 0 32px #f43f5e, 0 0 48px #fb7185;
-          }
-        }
+      {/* Outro */}
+      <div className="h-[50vh] bg-black text-white flex items-center justify-center relative z-20">
+         <h2 className="text-4xl font-mono text-gray-600">Let's build the future.</h2>
+      </div>
 
-        .animate-textGlow {
-          animation: textGlow 3s ease-in-out infinite;
-        }
-
-        @keyframes gradientShift {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-
-        @keyframes fadeSlideUp {
-          0% {
-            opacity: 0;
-            transform: translateY(20px) rotateX(0deg) rotateY(0deg);
-          }
-          100% {
-            opacity: 1;
-            transform: translateY(0) rotateX(0deg) rotateY(0deg);
-          }
-        }
-
-        .service-card {
-          position: relative;
-          padding: 2.5rem;
-          border-radius: 1.5rem;
-          backdrop-filter: blur(12px);
-          border: 1px solid rgba(255, 255, 255, 0.15);
-          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-          color: white;
-          cursor: pointer;
-          background-size: 400% 400%;
-          animation: gradientShift 12s ease infinite, fadeSlideUp 0.7s ease forwards;
-          transition: transform 0.35s ease, box-shadow 0.35s ease;
-          user-select: none;
-        }
-
-        .service-card:hover {
-          transform: perspective(800px) rotateX(10deg) rotateY(10deg) scale(1.07);
-          box-shadow: 0 30px 50px rgba(255, 255, 255, 0.3);
-          z-index: 10;
-        }
-      `}</style>
     </section>
   );
 }

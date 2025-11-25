@@ -1,188 +1,296 @@
+import React, { useState, useEffect, useCallback } from "react";
 
+const Adobe = () => {
+  const [activeModal, setActiveModal] = useState(null);
+  const [isVisible, setIsVisible] = useState(false);
 
-import React, { useState, useEffect } from "react";
-
-export default function Adobe() {
-  const [showModal, setShowModal] = useState(false);
-
+  // Professional scroll animation with Intersection Observer
   useEffect(() => {
-    const handleScroll = () => {
-      const elements = document.querySelectorAll(".fade-in-on-scroll");
-      elements.forEach((el) => {
-        const rect = el.getBoundingClientRect();
-        if (rect.top < window.innerHeight * 0.85) {
-          el.classList.add("opacity-100", "translate-y-0");
-          el.classList.remove("opacity-0", "translate-y-10");
-        }
-      });
-    };
-    window.addEventListener("scroll", handleScroll);
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("animate-fade-in-up");
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: "-50px" }
+    );
+
+    document.querySelectorAll(".observe-me").forEach((el) => observer.observe(el));
+    setIsVisible(true);
+
+    return () => observer.disconnect();
   }, []);
 
-  // Bubble count
-  const bubbleCount = 200;
+  // Optimized bubble background
+  const BubbleBackground = useCallback(() => {
+    const bubbles = Array.from({ length: 15 }, (_, i) => ({
+      id: i,
+      size: 20 + Math.random() * 80,
+      left: Math.random() * 100,
+      delay: Math.random() * 5,
+      duration: 20 + Math.random() * 10,
+      opacity: 0.05 + Math.random() * 0.1,
+    }));
 
+    return (
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        {bubbles.map((bubble) => (
+          <div
+            key={bubble.id}
+            className="absolute rounded-full bg-gradient-to-br from-purple-400/20 to-indigo-600/10 backdrop-blur-sm"
+            style={{
+              width: bubble.size,
+              height: bubble.size,
+              left: `${bubble.left}%`,
+              bottom: '-100px',
+              opacity: bubble.opacity,
+              animation: `float-up ${bubble.duration}s ease-in-out ${bubble.delay}s infinite`,
+            }}
+          />
+        ))}
+      </div>
+    );
+  }, []);
+
+  // Data structures
   const capabilities = [
-    "Customer/Human Behavior Analysis",
-    "Face Identification",
-    "Process Automation",
-    "Pattern Analysis",
-    "Intelligent Chatbot",
-    "Fraudulent Identification (Bank)",
-    "Data Analysis for Biological Macromolecular Structures",
-    "Predictive Analytics & Modeling",
-    "Targeted Marketing",
-    "Churn Analysis",
-    "Trend Analysis",
-    "Time Series Analysis",
+    {
+      title: "Customer Behavior Analysis",
+      description: "Advanced analytics to understand customer patterns and preferences",
+      icon: "📊",
+      features: ["Pattern Recognition", "Predictive Modeling", "Real-time Insights"]
+    },
+    {
+      title: "Face Identification",
+      description: "Secure and accurate facial recognition systems",
+      icon: "👤",
+      features: ["Biometric Security", "Access Control", "Identity Verification"]
+    },
+    {
+      title: "Process Automation",
+      description: "Intelligent automation for business workflows",
+      icon: "⚙️",
+      features: ["Workflow Optimization", "Cost Reduction", "Efficiency Boost"]
+    },
+    {
+      title: "Intelligent Chatbot",
+      description: "AI-powered conversational agents for enhanced customer experience",
+      icon: "💬",
+      features: ["24/7 Support", "Natural Language Processing", "Multi-platform Integration"]
+    },
+    {
+      title: "Fraud Detection",
+      description: "Real-time fraudulent activity identification for financial institutions",
+      icon: "🛡️",
+      features: ["Anomaly Detection", "Risk Assessment", "Compliance Monitoring"]
+    },
+    {
+      title: "Predictive Analytics",
+      description: "Data-driven forecasting and trend analysis",
+      icon: "🔮",
+      features: ["Market Trends", "Customer Insights", "Strategic Planning"]
+    }
   ];
 
   const industries = [
-    "Bank & Financial Organisations",
-    "Real-estate",
-    "E-commerce",
-    "Biomolecular Research",
-    "Pharmaceuticals",
+    { name: "Banking & Finance", icon: "🏦", count: "50+ Projects" },
+    { name: "Healthcare & Pharmaceuticals", icon: "🏥", count: "30+ Solutions" },
+    { name: "E-commerce & Retail", icon: "🛒", count: "45+ Implementations" },
+    { name: "Real Estate", icon: "🏢", count: "25+ Deployments" },
+    { name: "Research & Development", icon: "🔬", count: "20+ Collaborations" },
+  ];
+
+  const stats = [
+    { value: "98%", label: "Accuracy Rate" },
+    { value: "50%", label: "Cost Reduction" },
+    { value: "24/7", label: "System Uptime" },
+    { value: "200+", label: "Successful Deployments" },
   ];
 
   return (
-    <section className="ml-ai-hero-section">
-      {/* Bubble background container */}
-      <div className="bubble-bg pointer-events-none">
-        {[...Array(bubbleCount)].map((_, i) => {
-          // Random values for each bubble
-          const size = 15 + Math.random() * 60; // px
-          const left = Math.random() * 100; // %
-          const delay = Math.random() * 20; // s
-          const duration = 15 + Math.random() * 25; // s
-          const opacity = 0.1 + Math.random() * 0.25;
-
-          return (
-            <span
-              key={i}
-              className="bubble"
-              style={{
-                width: size,
-                height: size,
-                left: `${left}%`,
-                animationDelay: `${delay}s`,
-                animationDuration: `${duration}s`,
-                opacity,
-              }}
-            />
-          );
-        })}
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-indigo-900 relative overflow-hidden">
+      {/* Background Elements */}
+      <BubbleBackground />
+      
+      {/* Animated Grid Background */}
+      <div className="absolute inset-0 opacity-10">
+        <div className="absolute inset-0" style={{
+          backgroundImage: `linear-gradient(#ffffff 1px, transparent 1px),
+                           linear-gradient(90deg, #ffffff 1px, transparent 1px)`,
+          backgroundSize: '50px 50px'
+        }} />
       </div>
 
-      {/* Title & subtitle */}
-      <header className="max-w-4xl mx-auto text-center mb-20 fade-in-on-scroll opacity-0 translate-y-10 transition-all duration-700 ease-out z-20 relative">
-        <h1
-          className="text-5xl font-extrabold leading-tight mb-4 bg-gradient-to-r from-purple-400 via-pink-500 to-indigo-500 bg-clip-text text-transparent drop-shadow-lg"
-          style={{ textShadow: "0 0 12px rgba(124, 58, 237, 0.8)" }}
+      {/* Main Content */}
+      <div className="relative z-10 container mx-auto px-6 py-16">
+        {/* Hero Section */}
+        <section className="text-center mb-24 observe-me opacity-0">
+          <div className="inline-flex items-center px-4 py-2 rounded-full bg-purple-500/20 border border-purple-500/30 mb-8">
+            <span className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></span>
+            <span className="text-purple-300 text-sm font-medium">AI & ML Solutions</span>
+          </div>
+          
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-white via-purple-200 to-indigo-200 bg-clip-text text-transparent">
+            Machine Learning
+            <span className="block text-transparent bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text">
+              & Artificial Intelligence
+            </span>
+          </h1>
+          
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed mb-12">
+            Transform your business with cutting-edge AI and ML solutions. 
+            We deliver intelligent systems that drive innovation, efficiency, and competitive advantage.
+          </p>
+
+          {/* Stats Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto mb-16">
+            {stats.map((stat, index) => (
+              <div key={index} className="text-center p-6 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10">
+                <div className="text-3xl font-bold text-white mb-2">{stat.value}</div>
+                <div className="text-gray-400 text-sm">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <button className="px-8 py-4 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 rounded-xl font-semibold text-white transition-all duration-300 hover:scale-105 shadow-2xl shadow-purple-500/25">
+              Start Your AI Journey
+            </button>
+            <button className="px-8 py-4 border border-purple-500/30 hover:border-purple-500/50 rounded-xl font-semibold text-purple-300 hover:text-white transition-all duration-300 backdrop-blur-sm">
+              View Case Studies
+            </button>
+          </div>
+        </section>
+
+        {/* Capabilities Section */}
+        <section className="mb-24">
+          <div className="text-center mb-16 observe-me opacity-0">
+            <h2 className="text-4xl font-bold text-white mb-4">AI & ML Capabilities</h2>
+            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+              Comprehensive suite of artificial intelligence and machine learning services
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {capabilities.map((capability, index) => (
+              <div
+                key={index}
+                className="group observe-me opacity-0 p-8 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 hover:border-purple-500/30 transition-all duration-500 hover:scale-105 cursor-pointer"
+                onClick={() => setActiveModal(capability)}
+              >
+                <div className="text-3xl mb-4">{capability.icon}</div>
+                <h3 className="text-xl font-semibold text-white mb-3 group-hover:text-purple-300 transition-colors">
+                  {capability.title}
+                </h3>
+                <p className="text-gray-400 mb-4 leading-relaxed">
+                  {capability.description}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {capability.features.map((feature, idx) => (
+                    <span
+                      key={idx}
+                      className="px-3 py-1 text-xs bg-purple-500/20 text-purple-300 rounded-full border border-purple-500/30"
+                    >
+                      {feature}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Industries Section */}
+        <section className="mb-24">
+          <div className="text-center mb-16 observe-me opacity-0">
+            <h2 className="text-4xl font-bold text-white mb-4">Trusted Across Industries</h2>
+            <p className="text-gray-400 text-lg">
+              Delivering AI solutions to leading organizations worldwide
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            {industries.map((industry, index) => (
+              <div
+                key={index}
+                className="observe-me opacity-0 p-6 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 hover:border-indigo-500/30 transition-all duration-500"
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <div className="text-2xl">{industry.icon}</div>
+                  <span className="text-sm text-green-400 font-medium">{industry.count}</span>
+                </div>
+                <h3 className="text-lg font-semibold text-white mb-2">{industry.name}</h3>
+                <p className="text-gray-400 text-sm">
+                  Custom AI solutions tailored to industry-specific challenges and opportunities
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="text-center observe-me opacity-0">
+          <div className="max-w-4xl mx-auto p-12 rounded-3xl bg-gradient-to-r from-purple-600/20 to-indigo-600/20 border border-purple-500/30 backdrop-blur-sm">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+              Ready to Transform Your Business with AI?
+            </h2>
+            <p className="text-gray-300 text-lg mb-8 max-w-2xl mx-auto">
+              Schedule a consultation with our AI experts and discover how machine learning can drive your business forward.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button className="px-8 py-4 bg-white text-gray-900 hover:bg-gray-100 rounded-xl font-semibold transition-all duration-300 hover:scale-105">
+                Book a Consultation
+              </button>
+              <button className="px-8 py-4 border border-white/30 hover:border-white/50 text-white rounded-xl font-semibold transition-all duration-300 backdrop-blur-sm">
+                Download Brochure
+              </button>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      {/* Enhanced Modal */}
+      {activeModal && (
+        <div 
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in"
+          onClick={() => setActiveModal(null)}
         >
-          Machine Learning (ML) & Artificial Intelligence (AI)
-        </h1>
-        <p className="text-lg text-purple-300 max-w-3xl mx-auto tracking-wide">
-          Expert solutions crafted to empower your organization’s AI and ML journey.
-        </p>
-      </header>
-
-      {/* Description */}
-      <article className="max-w-4xl mx-auto text-purple-200 space-y-6 leading-relaxed fade-in-on-scroll opacity-0 translate-y-10 transition-all duration-700 delay-150 ease-out relative z-20">
-        <p>
-          ML integration enables your business to contextualize data efficiently, drastically reducing the effort to transform data sets for better, actionable insights.
-          AI solutions elevate your strategic decisions, forecasting potential future scopes and limitations before major investments.
-        </p>
-        <p>
-          Adopted rapidly across diverse industries, these technologies are tailored with cutting-edge innovations to meet the unique demands of your business.
-        </p>
-      </article>
-
-      {/* What we can do */}
-      <section className="mt-24 max-w-4xl mx-auto fade-in-on-scroll opacity-0 translate-y-10 transition-all duration-700 delay-300 ease-out z-20 relative">
-        <h2 className="text-3xl font-semibold mb-8 border-b border-purple-500 pb-3 drop-shadow-lg">
-          What we can do
-        </h2>
-        <ul className="list-disc list-inside space-y-3 text-purple-300 text-lg select-text">
-          {capabilities.map((item, idx) => (
-            <li
-              key={item}
-              className="cursor-pointer hover:text-indigo-400 transition-colors duration-300"
-              onClick={() => idx === 4 && setShowModal(true)}
-              title={idx === 4 ? "Click for more info" : ""}
-              tabIndex={0}
-              onKeyDown={(e) => { if (e.key === "Enter" && idx === 4) setShowModal(true); }}
-            >
-              {item}
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      {/* Industries served */}
-      <section className="mt-24 max-w-4xl mx-auto fade-in-on-scroll opacity-0 translate-y-10 transition-all duration-700 delay-450 ease-out z-20 relative">
-        <h2 className="text-3xl font-semibold mb-8 border-b border-purple-500 pb-3 drop-shadow-lg">
-          Clients we have served in
-        </h2>
-        <ul className="list-disc list-inside space-y-3 text-purple-300 text-lg select-text">
-          {industries.map((item) => (
-            <li key={item} className="hover:text-indigo-400 transition-colors duration-300 cursor-default">
-              {item}
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      {/* Contact CTA */}
-      <section className="mt-28 text-center fade-in-on-scroll opacity-0 translate-y-10 transition-all duration-700 delay-600 ease-out z-20 relative">
-        <p className="text-purple-300 mb-8 text-lg tracking-wide">
-          Ready to bring AI and ML innovations to your projects?
-        </p>
-        <a
-          href="mailto:contact@yourcompany.com"
-          className="inline-block bg-gradient-to-r from-purple-600 via-pink-600 to-indigo-600 hover:from-purple-700 hover:via-pink-700 hover:to-indigo-700 transition transform px-14 py-4 rounded-full text-lg font-semibold tracking-wide shadow-xl shadow-purple-700/50 hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-purple-500"
-          aria-label="Contact Us"
-        >
-          Contact Us
-        </a>
-      </section>
-
-      {/* Modal */}
-      {showModal && (
-        <div
-          className="fixed inset-0 bg-gradient-to-tr from-[#1a1a2e] via-[#16213e] to-[#0f3460] bg-opacity-95 flex items-center justify-center z-50 p-6"
-          onClick={() => setShowModal(false)}
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="modal-title"
-          tabIndex={-1}
-        >
-          <div
-            className="bg-[#1b1464] border-2 border-purple-500 rounded-lg p-8 max-w-md text-purple-100 relative shadow-2xl shadow-purple-700"
+          <div 
+            className="bg-gray-900 rounded-2xl border border-purple-500/30 max-w-md w-full p-8 animate-scale-in"
             onClick={(e) => e.stopPropagation()}
           >
-            <h3
-              id="modal-title"
-              className="text-2xl font-semibold mb-5 drop-shadow-lg"
-              style={{ textShadow: "0 0 10px #a855f7" }}
-            >
-              Intelligent Chatbot
-            </h3>
-            <p className="mb-6 text-purple-200 leading-relaxed">
-              Our Intelligent Chatbots use advanced NLP and ML algorithms to provide human-like conversational experiences, automate customer service, and significantly improve user engagement.
-            </p>
+            <div className="flex items-center justify-between mb-6">
+              <div className="text-2xl">{activeModal.icon}</div>
+              <button
+                onClick={() => setActiveModal(null)}
+                className="text-gray-400 hover:text-white transition-colors p-2 rounded-lg hover:bg-white/10"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            
+            <h3 className="text-2xl font-bold text-white mb-4">{activeModal.title}</h3>
+            <p className="text-gray-300 mb-6 leading-relaxed">{activeModal.description}</p>
+            
+            <div className="space-y-3 mb-8">
+              <h4 className="font-semibold text-white">Key Features:</h4>
+              {activeModal.features.map((feature, index) => (
+                <div key={index} className="flex items-center text-gray-300">
+                  <svg className="w-4 h-4 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  {feature}
+                </div>
+              ))}
+            </div>
+            
             <button
-              onClick={() => setShowModal(false)}
-              className="absolute top-3 right-3 text-purple-300 hover:text-purple-500 text-3xl font-bold focus:outline-none"
-              aria-label="Close modal"
-            >
-              &times;
-            </button>
-            <button
-              onClick={() => setShowModal(false)}
-              className="mt-4 bg-gradient-to-r from-purple-600 via-pink-600 to-indigo-600 hover:from-purple-700 hover:via-pink-700 hover:to-indigo-700 transition px-6 py-2 rounded-full text-white font-semibold shadow-lg focus:outline-none focus:ring-4 focus:ring-purple-500"
+              onClick={() => setActiveModal(null)}
+              className="w-full py-3 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 rounded-xl font-semibold text-white transition-all duration-300"
             >
               Close
             </button>
@@ -190,83 +298,65 @@ export default function Adobe() {
         </div>
       )}
 
-      {/* Custom styles */}
       <style jsx>{`
-        /* Floating bubble animation */
-        @keyframes bubbleFloat {
+        @keyframes float-up {
           0% {
-            transform: translateY(0) translateX(0);
+            transform: translateY(0) translateX(0) rotate(0deg);
             opacity: 0;
           }
           10% {
             opacity: 0.5;
           }
-          50% {
-            opacity: 0.8;
-          }
           90% {
-            opacity: 0.5;
+            opacity: 0.3;
           }
           100% {
-            transform: translateY(-120vh) translateX(20px);
+            transform: translateY(-120vh) translateX(20px) rotate(180deg);
             opacity: 0;
           }
         }
 
-        .bubble-bg {
-          position: absolute;
-          inset: 0;
-          overflow: hidden;
-          z-index: 5;
-          pointer-events: none;
+        @keyframes fade-in-up {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
 
-        .bubble {
-          position: absolute;
-          bottom: -100px; /* start just below view */
-          border-radius: 50%;
-          background: radial-gradient(
-            circle at center,
-            rgba(124, 58, 237, 0.5),
-            transparent 70%
-          );
-          filter: drop-shadow(0 0 12px rgba(124, 58, 237, 0.8));
-          animation-name: bubbleFloat;
-          animation-timing-function: ease-in-out;
-          animation-iteration-count: infinite;
-          animation-direction: normal;
-          will-change: transform, opacity;
-          /* size, left, delay, and duration come from inline styles */
+        @keyframes fade-in {
+          from { opacity: 0; }
+          to { opacity: 1; }
         }
 
-        /* Hero section styles (you already have these) */
-        .ml-ai-hero-section {
-          position: relative;
-          min-height: 100vh;
-          padding: 6rem 1.5rem;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          color: white;
-          overflow: hidden;
-          background: linear-gradient(145deg, #0f172a, #1e293b, #3b0764, #7c3aed);
-          background-size: 400% 400%;
-          animation: gradientShift 20s ease infinite;
-          z-index: 0;
+        @keyframes scale-in {
+          from { 
+            opacity: 0;
+            transform: scale(0.9);
+          }
+          to { 
+            opacity: 1;
+            transform: scale(1);
+          }
         }
 
-        @keyframes gradientShift {
-          0% {
-            background-position: 0% 50%;
-          }
-          50% {
-            background-position: 100% 50%;
-          }
-          100% {
-            background-position: 0% 50%;
-          }
+        .animate-fade-in-up {
+          animation: fade-in-up 0.8s ease-out forwards;
+        }
+
+        .animate-fade-in {
+          animation: fade-in 0.3s ease-out forwards;
+        }
+
+        .animate-scale-in {
+          animation: scale-in 0.3s ease-out forwards;
         }
       `}</style>
-    </section>
+    </div>
   );
-}
+};
+
+export default Adobe;

@@ -1,17 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-
-const projects = [
-  { id: 1, title: "AI Chatbot", description: "A smart AI-powered chatbot to assist customers 24/7.", link: "https://aus-pac.vercel.app/" },
-  { id: 2, title: "E-Commerce Platform", description: "A scalable and secure platform for online shopping.", link: "#" },
-  { id: 3, title: "Mobile Fitness App", description: "Track workouts and health metrics with this app.", link: "#" },
-  { id: 4, title: "AI Chatbot", description: "A smart AI-powered chatbot to assist customers 24/7.", link: "#" },
-  { id: 5, title: "E-Commerce Platform", description: "A scalable and secure platform for online shopping.", link: "#" },
-  { id: 6, title: "Mobile Fitness App", description: "Track workouts and health metrics with this app.", link: "#" },
-  { id: 7, title: "AI Chatbot", description: "A smart AI-powered chatbot to assist customers 24/7.", link: "#" },
-  { id: 8, title: "E-Commerce Platform", description: "A scalable and secure platform for online shopping.", link: "#" },
-  { id: 9, title: "Mobile Fitness App", description: "Track workouts and health metrics with this app.", link: "#" },
-];
+import { projects } from '../data/servicesData';
 
 export default function Project() {
   const [activeId, setActiveId] = useState(null);
